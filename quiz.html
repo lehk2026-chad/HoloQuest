@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="cover/holoquest-logo.png">
+  <link rel="apple-touch-icon" href="cover/holoquest-logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Mode - HOLOQUEST</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+      color: #f8fafc;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      max-width: 700px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #f8fafc;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .back-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    main {
+      width: 100%;
+      max-width: 700px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* PROGRESS BAR */
+    .progress-wrapper {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      height: 10px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #a855f7);
+      transition: width 0.3s ease;
+    }
+
+    /* QUESTION CARD */
+    .question-card {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 28px 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+    }
+
+    .question-number {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+
+    .question-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #f8fafc;
+    }
+
+    /* KAHOOT-STYLE GRID OPTIONS */
+    .options-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .opt-btn {
+      border: none;
+      border-radius: 14px;
+      padding: 20px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.15s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+      text-align: left;
+    }
+
+    .opt-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    .opt-btn:disabled {
+      cursor: default;
+    }
+
+    /* Colors */
+    .opt-0 { background: #e21b3c; } /* Red */
+    .opt-1 { background: #1368ce; } /* Blue */
+    .opt-2 { background: #d89e00; } /* Yellow */
+    .opt-3 { background: #26890c; } /* Green */
+
+    .opt-shape {
+      font-size: 1.2rem;
+      opacity: 0.85;
+    }
+
+    /* EXPLANATION BOX */
+    .explanation-card {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 14px;
+      padding: 16px;
+      border: 1px solid;
+      display: none;
+      text-align: center;
+    }
+    .explanation-card.correct {
+      border-color: #34d399;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+    }
+    .explanation-card.incorrect {
+      border-color: #f87171;
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    .next-btn {
+      margin-top: 12px;
+      background: #38bdf8;
+      color: #0f172a;
+      border: none;
+      font-weight: 700;
+      padding: 10px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    /* END SUMMARY CARD */
+    .summary-card {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.9);
+      border: 2px solid #818cf8;
+      border-radius: 20px;
+      padding: 32px 20px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(129, 140, 248, 0.2);
+    }
+
+    @media (max-width: 550px) {
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="back-btn">← Back to Menu</a>
+    <h1 class="page-title">QUIZ MODE</h1>
+    <div class="score-badge">
+      ⚡ <span id="scoreDisplay">0</span> PTS
+    </div>
+  </header>
+
+  <main>
+    <!-- Progress Bar -->
+    <div class="progress-wrapper">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Active Question View -->
+    <div id="quizActiveView" style="width: 100%; display: flex; flex-direction: column; gap: 20px; align-items: center;">
+      <div class="question-card">
+        <div class="question-number" id="questionNumText">Question 1 of 5</div>
+        <div class="question-text" id="questionText">Loading question...</div>
+      </div>
+
+      <div class="options-grid" id="optionsGrid">
+        <button class="opt-btn opt-0" data-index="0"><span class="opt-shape">▲</span> <span class="opt-text">Option 1</span></button>
+        <button class="opt-btn opt-1" data-index="1"><span class="opt-shape">◆</span> <span class="opt-text">Option 2</span></button>
+        <button class="opt-btn opt-2" data-index="2"><span class="opt-shape">●</span> <span class="opt-text">Option 3</span></button>
+        <button class="opt-btn opt-3" data-index="3"><span class="opt-shape">■</span> <span class="opt-text">Option 4</span></button>
+      </div>
+
+      <div class="explanation-card" id="explanationCard">
+        <h3 id="feedbackTitle" style="margin-bottom: 6px;"></h3>
+        <p id="explanationText" style="font-weight: 500; font-size: 0.95rem;"></p>
+        <button class="next-btn" id="nextQuestionBtn">Next Question →</button>
+      </div>
+    </div>
+
+    <!-- Final Score Summary View -->
+    <div id="summaryView" style="width: 100%; display: none;">
+      <div class="summary-card">
+        <h2 style="font-size: 1.8rem; margin-bottom: 10px;">🎉 QUIZ COMPLETE!</h2>
+        <p style="color: #94a3b8; margin-bottom: 20px;">You've completed today's Hololive trivia challenge!</p>
+        <div style="font-size: 3rem; font-weight: 800; color: #38bdf8; margin-bottom: 10px;" id="finalScoreText">0 PTS</div>
+        <p style="font-size: 1.1rem; color: #f8fafc; margin-bottom: 24px;" id="finalRatioText">0 / 5 Correct</p>
+        <a href="index.html" class="back-btn" style="padding: 12px 28px; font-size: 1rem; display: inline-block;">Return to Menu</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Load Engine & Data -->
+  <script src="trivia.js"></script>
+  <script src="quiz-mode.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const scoreEl = document.getElementById("scoreDisplay");
+      const progressFill = document.getElementById("progressFill");
+      const numText = document.getElementById("questionNumText");
+      const qText = document.getElementById("questionText");
+      const optionsGrid = document.getElementById("optionsGrid");
+      const explanationCard = document.getElementById("explanationCard");
+      const feedbackTitle = document.getElementById("feedbackTitle");
+      const explanationText = document.getElementById("explanationText");
+      const nextBtn = document.getElementById("nextQuestionBtn");
+
+      const activeView = document.getElementById("quizActiveView");
+      const summaryView = document.getElementById("summaryView");
+      const finalScoreText = document.getElementById("finalScoreText");
+      const finalRatioText = document.getElementById("finalRatioText");
+
+      const shapes = ["▲", "◆", "●", "■"];
+      const session = new QuizGameSession(triviaQuestions);
+
+      function renderCurrentQuestion() {
+        scoreEl.textContent = session.score;
+
+        if (session.isGameOver) {
+          activeView.style.display = "none";
+          summaryView.style.display = "block";
+          finalScoreText.textContent = `${session.score} PTS`;
+          
+          const correctCount = session.userAnswers.filter(a => a.isCorrect).length;
+          finalRatioText.textContent = `${correctCount} / ${session.questions.length} Correct`;
+          return;
+        }
+
+        const q = session.getCurrentQuestion();
+        if (!q) return;
+
+        // Update progress
+        const currentNum = session.currentIndex + 1;
+        const total = session.questions.length;
+        numText.textContent = `Question ${currentNum} of ${total}`;
+        qText.textContent = q.question;
+        progressFill.style.width = `${((session.currentIndex) / total) * 100}%`;
+
+        // Hide explanation
+        explanationCard.style.display = "none";
+
+        // Render options
+        optionsGrid.innerHTML = "";
+        q.options.forEach((optStr, idx) => {
+          const btn = document.createElement("button");
+          btn.className = `opt-btn opt-${idx}`;
+          btn.innerHTML = `<span class="opt-shape">${shapes[idx]}</span> <span>${optStr}</span>`;
+          btn.addEventListener("click", () => handleOptionClick(idx));
+          optionsGrid.appendChild(btn);
+        });
+      }
+
+      function handleOptionClick(selectedIdx) {
+        // Disable buttons
+        const btns = optionsGrid.querySelectorAll(".opt-btn");
+        btns.forEach(b => b.disabled = true);
+
+        const result = session.submitAnswer(selectedIdx);
+        if (!result) return;
+
+        scoreEl.textContent = session.score;
+
+        // Show option feedback styling
+        btns.forEach((btn, idx) => {
+          if (idx === result.correctIndex) {
+            btn.style.boxShadow = "0 0 20px #34d399";
+            btn.style.outline = "3px solid #34d399";
+          } else if (idx === selectedIdx && !result.isCorrect) {
+            btn.style.opacity = "0.4";
+          } else {
+            btn.style.opacity = "0.4";
+          }
+        });
+
+        // Show Explanation
+        explanationCard.style.display = "block";
+        if (result.isCorrect) {
+          explanationCard.className = "explanation-card correct";
+          feedbackTitle.textContent = "🎉 Correct! (+100 PTS)";
+        } else {
+          explanationCard.className = "explanation-card incorrect";
+          feedbackTitle.textContent = "❌ Incorrect!";
+        }
+        explanationText.textContent = result.explanation;
+      }
+
+      nextBtn.addEventListener("click", () => {
+        renderCurrentQuestion();
+      });
+
+      // Initial Render
+      renderCurrentQuestion();
+    });
+  </script>
+</body>
+</html>

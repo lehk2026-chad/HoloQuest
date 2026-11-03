@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="cover/holoquest-logo.png">
+  <link rel="apple-touch-icon" href="cover/holoquest-logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infinite Oshi Mark - HOLOQUEST</title>
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+      color: #f8fafc;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #f8fafc;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .back-btn:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    .arcade-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    main {
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* OSHI MARK DISPLAY CARD */
+    .oshi-display-card {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      border: 2px solid rgba(245, 158, 11, 0.4);
+      border-radius: 20px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+    }
+
+    .oshi-emoji {
+      font-size: 5rem;
+      line-height: 1;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.4));
+      animation: pulseEmoji 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseEmoji {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .oshi-prompt {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    /* HINT CARDS CONTAINER */
+    .hints-container {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+    }
+
+    .hint-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .hint-card.unlocked {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid #f59e0b;
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+    }
+
+    .hint-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: #94a3b8;
+      margin-bottom: 4px;
+    }
+
+    .hint-value {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    /* Autocomplete Styling */
+    .guess-input-wrapper {
+      width: 100%;
+      position: relative;
+    }
+
+    #talentInput {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      color: #f8fafc;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    #talentInput:focus {
+      border-color: #f59e0b;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+    }
+
+    .autocomplete-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      max-height: 280px;
+      overflow-y: auto;
+      z-index: 1000;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      display: none;
+    }
+
+    .autocomplete-dropdown.show {
+      display: block;
+    }
+
+    .autocomplete-item {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: background 0.15s ease;
+    }
+
+    .autocomplete-item:last-child {
+      border-bottom: none;
+    }
+
+    .autocomplete-item:hover, .autocomplete-item.highlighted {
+      background: rgba(245, 158, 11, 0.15);
+    }
+
+    .talent-oshi {
+      font-size: 1.2rem;
+    }
+
+    .talent-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .talent-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #f8fafc;
+    }
+
+    .talent-meta {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    /* GUESS HISTORY LIST */
+    .guess-history {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .history-item.incorrect {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #f87171;
+    }
+
+    .history-item.correct {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+
+    /* END BANNERS */
+    .end-banner {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      border: 2px solid;
+    }
+    .end-banner.win {
+      border-color: #34d399;
+      box-shadow: 0 0 20px rgba(52, 211, 153, 0.3);
+    }
+    .end-banner.lose {
+      border-color: #f87171;
+      box-shadow: 0 0 20px rgba(248, 113, 113, 0.3);
+    }
+
+    .next-target-btn {
+      display: none;
+      margin: 10px auto 0 auto;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #ffffff;
+      border: none;
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+      transition: all 0.2s ease;
+    }
+    .next-target-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 25px rgba(245, 158, 11, 0.6);
+    }
+    .autocomplete-item {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.15s ease;
+}
+
+.talent-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.talent-avatar-placeholder {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94a3b8;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+  </style>
+</head>
+<body>
+
+  <!-- Header Bar -->
+  <header>
+    <a href="infinite.html" class="back-btn">← Arcade Hub</a>
+    <h1 class="page-title">INFINITE OSHI MARK</h1>
+    
+    <div style="display: flex; gap: 10px;">
+      <div class="arcade-badge" title="Active Win Streak">
+        🔥 <span id="streakCount">0</span> Streak
+      </div>
+      <div class="arcade-badge" title="Best Streak" style="background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.3); color: #38bdf8;">
+        🏆 <span id="bestCount">0</span> Best
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Oshi Mark Display -->
+    <div class="oshi-display-card">
+      <div class="oshi-emoji" id="targetOshiEmoji">🌟</div>
+      <span class="oshi-prompt">Whose Oshi Mark is this?</span>
+    </div>
+
+    <!-- Hints Box -->
+    <div class="hints-container">
+      <div class="hint-card" id="hint1"><div class="hint-label">Hint 1</div><div class="hint-value">🔒 Branch</div></div>
+      <div class="hint-card" id="hint2"><div class="hint-label">Hint 2</div><div class="hint-value">🔒 Generation</div></div>
+      <div class="hint-card" id="hint3"><div class="hint-label">Hint 3</div><div class="hint-value">🔒 Species</div></div>
+      <div class="hint-card" id="hint4"><div class="hint-label">Hint 4</div><div class="hint-value">🔒 Debut Year</div></div>
+    </div>
+
+    <!-- Autocomplete Guess Input Wrapper -->
+    <div class="guess-input-wrapper">
+      <input 
+        type="text" 
+        id="talentInput" 
+        placeholder="Type a Holomem name..." 
+        autocomplete="off"
+      />
+      <div id="talentDropdown" class="autocomplete-dropdown"></div>
+    </div>
+
+    <!-- End Game Banner Container -->
+    <div id="endBannerContainer" style="width: 100%;"></div>
+
+    <!-- Guesses History -->
+    <div class="guess-history" id="guessHistory"></div>
+
+    <!-- Next Target Button (Appears on Win/Loss) -->
+    <button class="next-target-btn" id="nextTargetBtn">Next Oshi Mark →</button>
+  </main>
+
+  <!-- Load Scripts -->
+  <script src="talents.js"></script>
+  <script src="autocomplete.js"></script>
+  <script src="infinite-oshi-mode.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const inputEl = document.getElementById("talentInput");
+      const dropdownEl = document.getElementById("talentDropdown");
+      const oshiEmojiEl = document.getElementById("targetOshiEmoji");
+      const historyContainer = document.getElementById("guessHistory");
+      const bannerContainer = document.getElementById("endBannerContainer");
+      const streakEl = document.getElementById("streakCount");
+      const bestEl = document.getElementById("bestCount");
+      const nextTargetBtn = document.getElementById("nextTargetBtn");
+
+      // Initialize Engine Session
+      const session = new InfiniteOshiSession(talents);
+
+      function updateScoreboard() {
+        streakEl.textContent = session.currentStreak;
+        bestEl.textContent = session.bestStreak;
+      }
+
+      function resetHintsUI() {
+        for (let i = 1; i <= 4; i++) {
+          const card = document.getElementById(`hint${i}`);
+          if (card) {
+            card.classList.remove("unlocked");
+            card.querySelector(".hint-label").textContent = `Hint ${i}`;
+            const labels = ["Branch", "Generation", "Species", "Debut Year"];
+            card.querySelector(".hint-value").textContent = `🔒 ${labels[i - 1]}`;
+          }
+        }
+      }
+
+      function updateHintsUI() {
+        const unlocked = session.getUnlockedHints();
+        unlocked.forEach((hint, index) => {
+          const card = document.getElementById(`hint${index + 1}`);
+          if (card) {
+            card.classList.add("unlocked");
+            card.querySelector(".hint-label").textContent = hint.type;
+            card.querySelector(".hint-value").textContent = hint.value;
+          }
+        });
+      }
+
+      function renderHistory() {
+        historyContainer.innerHTML = "";
+        session.guesses.forEach(g => {
+          const item = document.createElement("div");
+          item.className = `history-item ${g.isCorrect ? "correct" : "incorrect"}`;
+          item.innerHTML = `
+            <span>${g.talent.oshiMark || "🌟"} ${g.talent.name}</span>
+            <span>${g.isCorrect ? "✓ MATCH" : "✗ INCORRECT"}</span>
+          `;
+          historyContainer.appendChild(item);
+        });
+      }
+
+      function checkEndState() {
+        if (!session.isGameOver) return;
+
+        inputEl.disabled = true;
+        updateScoreboard();
+        nextTargetBtn.style.display = "block";
+
+        if (session.isWon) {
+          inputEl.placeholder = "🎉 Correct! Click below for the next mark.";
+          bannerContainer.innerHTML = `
+            <div class="end-banner win">
+              <h2>🎉 CONGRATULATIONS!</h2>
+              <p>You matched <strong>${session.target.oshiMark}</strong> to <strong>${session.target.name}</strong>!</p>
+            </div>
+          `;
+        } else {
+          inputEl.placeholder = "❌ Out of attempts! Try the next target.";
+          bannerContainer.innerHTML = `
+            <div class="end-banner lose">
+              <h2>ROUND OVER</h2>
+              <p>The correct Holomem was <strong>${session.target.name}</strong> ${session.target.oshiMark}</p>
+            </div>
+          `;
+        }
+      }
+
+      function initNewRound() {
+        session.selectNewTarget();
+        oshiEmojiEl.textContent = session.target.oshiMark;
+        inputEl.disabled = false;
+        inputEl.placeholder = "Type a Holomem name...";
+        inputEl.value = "";
+        nextTargetBtn.style.display = "none";
+        bannerContainer.innerHTML = "";
+        historyContainer.innerHTML = "";
+        resetHintsUI();
+        autocomplete.setGuessedTalents([]);
+        updateScoreboard();
+      }
+
+      // 1. Setup Initial State
+      oshiEmojiEl.textContent = session.target.oshiMark;
+      updateScoreboard();
+
+      // 2. Initialize Autocomplete
+      const autocomplete = new HoloAutocomplete(inputEl, dropdownEl, talents, (selectedTalent) => {
+        const result = session.makeGuess(selectedTalent);
+
+        if (result && !result.error) {
+          autocomplete.setGuessedTalents(session.guesses);
+          updateHintsUI();
+          renderHistory();
+          checkEndState();
+        }
+      });
+
+      nextTargetBtn.addEventListener("click", () => {
+        initNewRound();
+      });
+    });
+  </script>
+</body>
+</html>

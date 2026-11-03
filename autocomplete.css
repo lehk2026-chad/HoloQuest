@@ -1,0 +1,88 @@
+.guess-input-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 20px auto;
+}
+
+.guess-input-wrapper input {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 1rem;
+  background: rgba(15, 23, 42, 0.8);
+  border: 2px solid rgba(56, 189, 248, 0.3);
+  border-radius: 12px;
+  color: #f8fafc;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.guess-input-wrapper input:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  max-height: 320px;
+  overflow-y: auto;
+  display: none;
+}
+
+.autocomplete-dropdown.show {
+  display: block;
+}
+
+.autocomplete-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.active {
+  background: rgba(56, 189, 248, 0.15);
+}
+
+.talent-oshi {
+  font-size: 1.25rem;
+  min-width: 24px;
+  text-align: center;
+}
+
+.talent-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.talent-name {
+  color: #f8fafc;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.talent-name strong {
+  color: #38bdf8;
+}
+
+.talent-meta {
+  color: #94a3b8;
+  font-size: 0.75rem;
+}

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="cover/holoquest-logo.png">
+  <link rel="apple-touch-icon" href="cover/holoquest-logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HoloQuest - Infinite Arcade Hub</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      /* Background image setup pointing to the bg/ folder */
+      background: url('bg/infinite-bg.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Dark overlay to make text and cards readable over the background art */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.75);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top Navigation Bar */
+    .top-bar {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+    }
+
+    .back-btn {
+      padding: 8px 16px;
+      background-color: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(8px);
+      color: #38bdf8;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    .back-btn:hover {
+      background-color: rgba(51, 65, 85, 0.95);
+      border-color: #38bdf8;
+    }
+
+    .hub-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      letter-spacing: 3px;
+      color: #38bdf8;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.6), 0 0 40px rgba(56, 189, 248, 0.3);
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      font-size: 1rem;
+      margin-top: 8px;
+    }
+
+    /* Hub Mode Cards Grid */
+    .modes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      width: 100%;
+    }
+
+    .mode-card {
+      background-color: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(8px);
+      border: 2px solid #334155;
+      border-radius: 14px;
+      padding: 24px;
+      text-decoration: none;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .mode-card:hover {
+      transform: translateY(-5px);
+      border-color: #38bdf8;
+      background-color: rgba(39, 53, 72, 0.95);
+      box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
+    }
+
+    .card-badge {
+      align-self: flex-start;
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .mode-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #f8fafc;
+      transition: color 0.2s;
+    }
+
+    .mode-card:hover .mode-title {
+      color: #38bdf8;
+    }
+
+    .mode-desc {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <div class="top-bar">
+    <a href="index.html" class="back-btn">← Main Menu</a>
+  </div>
+
+  <div class="hub-container">
+    <header>
+      <h1>ARCADE HUB</h1>
+      <p class="subtitle">Select an endless game mode to test your Hololive knowledge!</p>
+    </header>
+
+    <!-- Hub Mode Selection Cards -->
+    <div class="modes-grid">
+      <!-- Infinite Classic Mode -->
+      <a href="infinite-classic.html" class="mode-card">
+        <span class="card-badge">Endless Mode</span>
+        <div class="mode-title">Infinite Classic</div>
+        <div class="mode-desc">Endless guessing using attribute comparisons (Branch, Generation, Species, Debut Year) with continuous streak tracking.</div>
+      </a>
+
+      <!-- Infinite Trivia / Quiz Mode -->
+      <a href="infinite-quiz.html" class="mode-card">
+        <span class="card-badge">Quiz Mode</span>
+        <div class="mode-title">Trivia Challenge</div>
+        <div class="mode-desc">Test your deep-cut Hololive lore with fast-paced, Kahoot-style multiple-choice trivia questions.</div>
+      </a>
+
+      <!-- Infinite Oshi Mark Mode -->
+      <a href="infinite-oshi.html" class="mode-card">
+        <span class="card-badge">Emoji Mode</span>
+        <div class="mode-title">Oshi Mark Reveal</div>
+        <div class="mode-desc">Guess the talent purely from their iconic emoji combinations before the reveal runs out!</div>
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>
