@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOLOQUEST - Hololive Fan Game</title>
+  <meta name="description" content="An interactive web-based fan game featuring Hololive quiz and trivia modes.">
+  <meta name="google-site-verification" content="ngPap_NloVk8vGfWUWGIrLQvzlZ222QykYPkftFWR-k" />
+  <link rel="icon" type="image/png" href="cover/holoquest-logo.png">
+  <link rel="apple-touch-icon" href="cover/holoquest-logo.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HoloQuest - Main Menu</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      /* Background image setup pointing to the bg/ folder */
+      background: url('bg/index-bg.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Dark overlay to make text and cards readable over the background art */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.75);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .menu-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+
+    header {
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 3.5rem;
+      letter-spacing: 4px;
+      color: #38bdf8;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.6), 0 0 40px rgba(56, 189, 248, 0.3);
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      font-size: 1.1rem;
+      margin-top: 8px;
+      letter-spacing: 1px;
+    }
+
+    /* Mode Selection Grid (2x2 layout) */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      width: 100%;
+    }
+
+    .menu-card {
+      background-color: rgba(30, 41, 59, 0.85);
+      backdrop-filter: blur(8px);
+      border: 2px solid #334155;
+      border-radius: 14px;
+      padding: 24px;
+      text-decoration: none;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .menu-card:hover {
+      transform: translateY(-5px);
+      border-color: #38bdf8;
+      background-color: rgba(39, 53, 72, 0.95);
+      box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
+    }
+
+    .card-badge {
+      align-self: flex-start;
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #f8fafc;
+      transition: color 0.2s;
+    }
+
+    .menu-card:hover .card-title {
+      color: #38bdf8;
+    }
+
+    .card-desc {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="menu-container">
+    <header>
+      <h1>HOLOQUEST</h1>
+      <p class="subtitle">The Ultimate Hololive VTuber Guessing Game</p>
+    </header>
+
+    <div class="menu-grid">
+      <!-- Classic Mode Card -->
+      <a href="classic.html" class="menu-card">
+        <span class="card-badge">Daily Mode</span>
+        <div class="card-title">Classic Mode</div>
+        <div class="card-desc">Guess today's mystery talent using attributes like Branch, Generation, Species, and Debut Year. Resets at midnight!</div>
+      </a>
+
+      <!-- Arcade Hub / Infinite Modes Card -->
+      <a href="infinite.html" class="menu-card">
+        <span class="card-badge">Endless Arcade</span>
+        <div class="card-title">Arcade Hub</div>
+        <div class="card-desc">Play endless rounds with non-stop random targets, build high-score streaks, and test out various mini-games!</div>
+      </a>
+
+      <!-- Trivia / Quiz Mode Card -->
+      <a href="quiz.html" class="menu-card">
+        <span class="card-badge">Quiz Mode</span>
+        <div class="card-title">Trivia Challenge</div>
+        <div class="card-desc">Test your deep-cut Hololive lore with fast-paced, Kahoot-style multiple-choice trivia questions.</div>
+      </a>
+
+      <!-- Oshi Mark Emoji Reveal Mode Card -->
+      <a href="oshi.html" class="menu-card">
+        <span class="card-badge">Emoji Mode</span>
+        <div class="card-title">Oshi Mark Reveal</div>
+        <div class="card-desc">Guess the talent purely from their iconic emoji combinations before the reveal runs out!</div>
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>
